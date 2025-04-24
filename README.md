@@ -51,40 +51,6 @@ This action is designed to handle various email-related operations such as sendi
   - `move`
   - `forward`
 
-- **`channel`**: The communication channel, default is `"email"`.
-
-- **`functions`**: A list of functions for handling email actions. Example:
-  ```json
-  {
-    "type": "function",
-    "function": {
-      "name": "handle_email_action",
-      "description": "Process email actions based on the content and directives.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "actions": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": ["delete", "draft", "send", "reply", "move", "forward"]
-            },
-            "description": "List of actions to be performed on the email."
-          },
-          "directives": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Directives for processing the email."
-          }
-        },
-        "required": ["actions"]
-      }
-    }
-  }
-  ```
-
 ---
 
 ## 🚀 Email Action Setup Guide
@@ -97,6 +63,9 @@ This action is designed to handle various email-related operations such as sendi
 ### Step 2: Define Directives
 
 1. Specify directives for processing emails, such as moving to folders or marking as read.
+- Example:
+   - Move all emails from bank to the bank folder.
+   - Delete all emails from john_doe@gmail.com
 
 ### Step 3: Implement Custom Functions
 
