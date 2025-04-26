@@ -466,4 +466,62 @@ node EmailAction :Action: {
         # return message.replace("**", "*").replace("<br/>", "\n").replace("<b>", "*").replace("</b>", "*");
         return message;
     }
+
+    can healthcheck() -> Union[bool, dict] {
+        try {
+            # Check if accounts are configured
+            if not self.accounts {
+                return {
+                    "status": False,
+                    "message": "No email accounts are configured.",
+                    "severity": "error"
+                };
+            }
+
+            # Validate each account configuration
+            for account in self.accounts {
+                if not account.get('sender_email') or not account.get('sender_password') {
+                    return {
+                        "status": False,
+                        "message": f"Missing credentials for account: {account.get('sender_email', 'Unknown')}",
+                        "severity": "error"
+                    };
+                }else {
+                    # Test connection for the first account
+                    sender_email = account['sender_email'];
+                    sender_password = account['sender_password'];
+
+                    if not self.get_host(sender_email=sender_email) {
+                        return {
+                            "status": False,
+                            "message": f"Unable to determine host for email: {sender_email}",
+                            "severity": "error"
+                        };
+                    }
+
+                    # Attempt to fetch emails to verify connection
+                    try {
+                        self.get_new_emails(sender_email=sender_email, sender_password=sender_password, mark_as_read=False, max_emails=1);
+                    } except Exception as e {
+                        return {
+                            "status": False,
+                            "message": f"Failed to connect to email server for {sender_email}: {e}",
+                            "severity": "error"
+                        };
+                    }
+
+                }
+            }
+
+
+            return True;
+        } except Exception as e {
+            self.logger.error(f"An exception occurred during healthcheck: \n{traceback.format_exc()}\n");
+            return {
+                "status": False,
+                "message": f"An unexpected error occurred: {e}",
+                "severity": "error"
+            };
+        }
+    }
 }
