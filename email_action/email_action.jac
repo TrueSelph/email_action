@@ -64,6 +64,7 @@ node EmailAction :Action: {
 
 
     can pulse() {
+        self.logger.warning("email pulsing...");
         agent_node = self.get_agent();
 
         for account in self.accounts{

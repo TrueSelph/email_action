@@ -614,7 +614,7 @@ class EmailAPI:
                     destination_folder = default_list[destination_folder]
             except KeyError:
                 status, folder_list = imap_connection.list()
-                if destination_folder not in str(folder_list):
+                if f'"{destination_folder}"' not in str(folder_list):
                     EmailAPI.create_folder(
                         host, sender_email, sender_password, destination_folder
                     )

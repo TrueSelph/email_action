@@ -53,11 +53,22 @@ This action is designed to handle various email-related operations such as sendi
 
 ---
 
+### Example
+
+```yaml
+accounts:
+   sender_email: xxxx@gmail.com
+   sender_password: xxxx xxxx xxxx xxxx
+   directives:
+      - move all google email to 'google' folder
+      - delete all emails from Quora.
+```
+
 ## 🚀 Email Action Setup Guide
 
 ### Step 1: Configure Email Accounts
 
-1. Define your email accounts in the configuration file.
+1. Define your email accounts in the configuration file. **[Create app password](https://myaccount.google.com/apppasswords)**
 2. Include the sender email, password, and optional session ID.
 
 ### Step 2: Define Directives
