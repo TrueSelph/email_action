@@ -4,27 +4,27 @@ description: An AI representation of Eldon Marks.
 actions:
 - action: jivas/agent_utils_action
   context:
-    version: 0.0.1
+    version: 0.1.0
     enabled: true
 - action: jivas/persona_interact_action
   context:
-    version: 0.0.1
+    version: 0.1.0
     enabled: true
 - action: jivas/pulse_action
   context:
-    version: 0.0.1
+    version: 0.1.0
     enabled: true
     config:
       EmailAction: every(1).minutes
 - action: jivas/langchain_model_action
   context:
-    version: 0.0.1
+    version: 0.1.0
     enabled: true
     model_name: gpt-4o
     api_key: ""
 - action: jivas/email_action
   context:
-    version: 0.0.1
+    version: 0.1.0
     enabled: true
     mark_as_read: true
     accounts:

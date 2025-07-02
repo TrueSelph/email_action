@@ -1,8 +1,8 @@
 package:
   name: jivas/email_action
   author: V75 Inc.
-  architype: EmailAction
-  version: 0.0.1
+  archetype: EmailAction
+  version: 0.1.0
   meta:
     title: Email Action
     description: The email action automates email management by enabling sending, reading, replying, and deleting of emails. This action streamlines email workflows by handling repetitive tasks efficiently.
@@ -11,6 +11,6 @@ package:
   config:
     singleton: true
   dependencies:
-    jivas: ^2.0.0
+    jivas: ~2.1.0
 
 

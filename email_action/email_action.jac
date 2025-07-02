@@ -1,17 +1,17 @@
-import:py copy;
-import:py logging;
-import:py traceback;
-import:py re;
-import:py from logging { Logger }
-import:py from modules.email_api { EmailAPI }
-import:py from jivas.agent.modules.agentlib.utils { Utils }
-import:jac from jivas.agent.action.action { Action }
-import:jac from jivas.agent.action.interact { interact }
-import:jac from jivas.agent.memory.interaction_response { MessageType }
-import:jac from jivas.agent.action.model_action { ModelAction, ModelActionResult }
+import copy;
+import logging;
+import traceback;
+import re;
+import from logging { Logger }
+import from modules.email_api { EmailAPI }
+import from jivas.agent.modules.agentlib.utils { Utils }
+import from jivas.agent.action.action { Action }
+import from jivas.agent.action.interact { interact }
+import from jivas.agent.memory.interaction_response { MessageType }
+import from jivas.agent.action.model_action { ModelAction, ModelActionResult }
 
 
-node EmailAction :Action: {
+node EmailAction(Action) {
     has accounts:list = [];
     has mark_as_read:bool = True;
     has email_actions:list = ['delete','draft','send','reply','move','forward'];
@@ -63,7 +63,7 @@ node EmailAction :Action: {
     has temperature:float = 0.2;
 
 
-    can pulse() {
+    def pulse() {
         self.logger.warning("email pulsing...");
         agent_node = self.get_agent();
 
@@ -269,43 +269,43 @@ node EmailAction :Action: {
     }
 
 
-    can send_email(sender_email:str, sender_password:str, recipient_email:str, subject:str, body:str, cc:list=None, bcc:list=None, attachments:list=None, html:bool=False) -> bool {
+    def send_email(sender_email:str, sender_password:str, recipient_email:str, subject:str, body:str, cc:list=None, bcc:list=None, attachments:list=None, html:bool=False) -> bool {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.send_email(host=host, sender_email=sender_email, sender_password=sender_password, recipient_email=recipient_email, subject=subject, body=body, cc=cc, bcc=bcc, attachments=attachments, html=html);
     }
 
 
-    can create_draft(sender_email:str, sender_password:str, recipient_email:str, subject:str, body:str, cc:list=None, bcc:list=None, attachments:list=None, html:bool=False) -> bool {
+    def create_draft(sender_email:str, sender_password:str, recipient_email:str, subject:str, body:str, cc:list=None, bcc:list=None, attachments:list=None, html:bool=False) -> bool {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.save_to_drafts(host=host, sender_email=sender_email, sender_password=sender_password, recipient_email=recipient_email, subject=subject, body=body, cc=cc, bcc=bcc, html=html, attachments=attachments);
     }
 
 
-    can forward_email(sender_email:str, sender_password:str, recipient_email:str, mailbox:str="INBOX", message_type:str="UNSEEN", email_id:str="") -> bool {
+    def forward_email(sender_email:str, sender_password:str, recipient_email:str, mailbox:str="INBOX", message_type:str="UNSEEN", email_id:str="") -> bool {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.forward_email(host=host, sender_email=sender_email, sender_password=sender_password, recipient_email=recipient_email, mailbox=mailbox, message_type=message_type, email_id=email_id);
     }
 
 
-    can reply_to_email(sender_email:str, sender_password:str, recipient_email:str, reply_to:str, subject:str, body:str, cc:list=None, bcc:list=None, attachments:list=None, html:bool=False) -> bool {
+    def reply_to_email(sender_email:str, sender_password:str, recipient_email:str, reply_to:str, subject:str, body:str, cc:list=None, bcc:list=None, attachments:list=None, html:bool=False) -> bool {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.reply_to_email(host=host, sender_email=sender_email, sender_password=sender_password, recipient_email=recipient_email, reply_to=reply_to, subject=subject, body=body, cc=cc, bcc=bcc, attachments=attachments, html=html);
     }
 
 
-    can delete_email(sender_email:str, sender_password:str, mailbox:str="INBOX", email_id:str="") -> bool {
+    def delete_email(sender_email:str, sender_password:str, mailbox:str="INBOX", email_id:str="") -> bool {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.delete_email(host=host, sender_email=sender_email, sender_password=sender_password, mailbox=mailbox, email_id=email_id);
     }
 
 
-    can move_email(sender_email:str, sender_password:str, mailbox:str="INBOX", email_id:str="", destination_folder:str="") -> bool {
+    def move_email(sender_email:str, sender_password:str, mailbox:str="INBOX", email_id:str="", destination_folder:str="") -> bool {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.move_email(host=host, sender_email=sender_email, sender_password=sender_password, mailbox=mailbox, email_id=email_id, destination_folder=destination_folder);
     }
 
 
-    can automate_emails(sender_email:str, sender_password:str, mailbox:str="INBOX", message_type:str="ALL",
+    def automate_emails(sender_email:str, sender_password:str, mailbox:str="INBOX", message_type:str="ALL",
                         delete_ids:list=[], auto_delete:bool=False, filter_list:list=[], get_filter:list=[], mark_as_read:bool=False) -> dict {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.automate_emails(host=host, sender_email=sender_email, sender_password=sender_password, mailbox=mailbox, message_type=message_type,
@@ -313,25 +313,25 @@ node EmailAction :Action: {
     }
 
 
-    can create_folder(sender_email:str, sender_password:str, folder_name:str) -> bool {
+    def create_folder(sender_email:str, sender_password:str, folder_name:str) -> bool {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.create_folder(host=host, sender_email=sender_email, sender_password=sender_password, folder_name=folder_name);
     }
 
 
-    can get_new_emails(sender_email:str, sender_password:str, mark_as_read:bool=True, max_emails:int=5) -> list {
+    def get_new_emails(sender_email:str, sender_password:str, mark_as_read:bool=True, max_emails:int=5) -> list {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.get_new_emails(host=host, sender_email=sender_email, sender_password=sender_password, mailbox="INBOX", message_type="UNSEEN", mark_as_read=mark_as_read, max_emails=max_emails);
     }
 
 
-    can set_email_type(sender_email:str, sender_password:str, mailbox:str="INBOX", message_type:str="UNSEEN", email_id:str="") -> bool {
+    def set_email_type(sender_email:str, sender_password:str, mailbox:str="INBOX", message_type:str="UNSEEN", email_id:str="") -> bool {
         host = self.get_host(sender_email=sender_email);
         return EmailAPI.set_email_type(host=host, sender_email=sender_email, sender_password=sender_password, mailbox=mailbox, message_type=message_type, email_id=email_id);
     }
 
 
-    can get_host(sender_email:str) -> str {
+    def get_host(sender_email:str) -> str {
         if('@gmail' in sender_email){
             host = 'imap.gmail.com';
         }elif('@outlook' in sender_email){
@@ -346,7 +346,7 @@ node EmailAction :Action: {
     }
 
 
-    can call_llm(prompt_messages: list, prompt_variables: dict={}, functions: list=[], is_json: bool=False) -> dict {
+    def call_llm(prompt_messages: list, prompt_variables: dict={}, functions: list=[], is_json: bool=False) -> dict {
         kwargs = {
             "op": self.model_op,
             "temperature": self.temperature
@@ -364,7 +364,9 @@ node EmailAction :Action: {
             if (model_action_result := model_action.call_model(
                 prompt_messages = prompt_messages,
                 prompt_variables = prompt_variables,
-                kwargs = kwargs,
+                model_temperature = self.temperature,
+                op = self.model_op,
+                functions = functions,
                 logging = True
             )) {
                 result = model_action_result.get_result();
@@ -394,7 +396,7 @@ node EmailAction :Action: {
     }
 
 
-    can convert_to_email_data(message: InteractionMessage) -> dict {
+    def convert_to_email_data(message: InteractionMessage) -> dict {
         email_data = {
             "body": "",
             "attachments": []
@@ -447,7 +449,7 @@ node EmailAction :Action: {
     }
 
 
-    can handle_email_interact(utterance:str, agent_id:str, session_id:str, verbose:bool=False, reporting:bool=False, channel:str='email', data:dict={}) -> dict {
+    def handle_email_interact(utterance:str, agent_id:str, session_id:str, verbose:bool=False, reporting:bool=False, channel:str='email', data:dict={}) -> dict {
         # call interact
         message = (root spawn interact(
             utterance = utterance,
@@ -463,12 +465,12 @@ node EmailAction :Action: {
     }
 
 
-    can sanitize_message(message:str) {
+    def sanitize_message(message:str) {
         # return message.replace("**", "*").replace("<br/>", "\n").replace("<b>", "*").replace("</b>", "*");
         return message;
     }
 
-    can healthcheck() -> Union[bool, dict] {
+    def healthcheck() -> Union[bool, dict] {
         try {
             # Check if accounts are configured
             if not self.accounts {

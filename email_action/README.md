@@ -13,7 +13,7 @@ This action is designed to handle various email-related operations such as sendi
 - **Name:** `jivas/email_action`
 - **Author:** [V75 Inc.](https://v75inc.com/)
 - **Architype:** `EmailAction`
-- **Version:** 0.0.1
+- **Version:** 0.1.0
 
 ## Meta Information
 
@@ -26,7 +26,7 @@ This action is designed to handle various email-related operations such as sendi
 - **Singleton:** true
 
 ## Dependencies
-- **Jivas:** ^2.0.0
+- **Jivas:** ^2.1.0
 
 
 ---
