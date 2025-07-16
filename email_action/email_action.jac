@@ -208,7 +208,7 @@ node EmailAction(Action) {
                                         verbose = False,
                                         reporting = False,
                                         channel = self.channel,
-                                        data = {"label": "email", "data_type": "json", "content": {"email": new_email}}
+                                        data = {"key": "email", "value": {"email": new_email}}
                                     );
 
                                     interact_data = self.convert_to_email_data(message=message);
