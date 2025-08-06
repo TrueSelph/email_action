@@ -4,7 +4,7 @@ import traceback;
 import re;
 import from logging { Logger }
 import from modules.email_api { EmailAPI }
-import from jivas.agent.modules.agentlib.utils { Utils }
+import from jivas.agent.modules.data.mime_types { get_mime_type }
 import from jivas.agent.action.action { Action }
 import from jivas.agent.action.interact { interact }
 import from jivas.agent.memory.interaction_response { MessageType }
@@ -407,7 +407,7 @@ node EmailAction(Action) {
         if message.get_type() == MessageType.TEXT.value{
             email_data["body"] = message.get_content();
         }elif message.get_type() == MessageType.MEDIA.value{
-            mime_type = Utils.get_mime_type(mime_type=message.mime);
+            mime_type = get_mime_type(mime_type=message.mime);
             media_url = message.data.get('url');
             is_html = message.data.get('html', False);
 
@@ -427,7 +427,7 @@ node EmailAction(Action) {
                 if message_item.get_type() == MessageType.TEXT.value{
                     email_data["body"] += f"\n{message_item.get_content()}";
                 }elif message_item.get_type() == MessageType.MEDIA.value {
-                    mime_type = Utils.get_mime_type(mime_type=message_item.mime);
+                    mime_type = get_mime_type(mime_type=message_item.mime);
                     media_url = message_item.data.get('url');
                     is_html = message_item.data.get('html', False);
                     if mime_type["file_type"] in ["document", "image", "video"]{
